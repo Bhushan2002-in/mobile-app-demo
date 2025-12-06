@@ -77,10 +77,9 @@ const channels = [
   { name: 'No-Gi Sharks', members: 57, matsOpen: false },
 ];
 
-const recipes = [
-  { name: 'Acai Bowl', details: 'Guarana-free acai, banana, bee pollen', macros: '35C / 20P / 12F' },
-  { name: 'Sambo Scramble', details: 'Egg whites, spinach, smoked salmon', macros: '10C / 34P / 14F' },
-  { name: 'Oss Recovery Shake', details: 'Cocoa, creatine, almond butter', macros: '25C / 32P / 15F' },
+const lastAttended = [
+  { name: 'Beginner class', duration: '2 hours' },
+  { name: 'Nogi Practice', duration: '3 hours' },
 ];
 
 const heatmapData = [
@@ -92,6 +91,8 @@ const StudyVideo = {
   instructor: 'Prof. Danaher',
   runtime: '18:22',
 };
+
+const LOGO_URL = 'https://graciebarra.com/oceania/wp-content/uploads/sites/10/sites/10/2025/02/logosBarraShield.svg';
 
 const profile = {
   name: 'Matheus Bessa',
@@ -129,8 +130,11 @@ function App() {
   const [aiMessages, setAiMessages] = useState([
     { role: 'assistant', content: 'Osu. Professor AI online. Keep your frames sharp and your breath steady.' },
   ]);
+  const [checkedIn, setCheckedIn] = useState(false);
 
-  const greeting = `${timeOfDay()}, ${userType === 'Adult' ? 'Warrior' : 'Little Champ'}`;
+  const greetingTime = timeOfDay();
+  const greetingTitle = userType === 'Adult' ? 'Warrior' : 'Little Champ';
+  const greeting = `${greetingTime}, ${greetingTitle}`;
 
   const callGemini = async (prompt) => {
     if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
@@ -214,10 +218,16 @@ function App() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
       </div>
-      <div className="relative max-w-md w-full rounded-[28px] bg-black/80 border border-white/10 p-8 space-y-6 shadow-2xl backdrop-blur-xl">
-        <div className="space-y-1">
-          <h1 className="text-4xl font-black text-red-600">MATFLIX</h1>
-          <p className="uppercase text-[11px] tracking-[0.32em] text-zinc-400">Unlimited Rolls.</p>
+      <div className="relative max-w-md w-full rounded-[32px] bg-black/85 border border-white/10 p-8 space-y-6 shadow-2xl backdrop-blur-xl">
+        <div className="space-y-3 text-center">
+          <div className="flex items-center justify-center gap-3">
+            <img src={LOGO_URL} alt="GB Warrior" className="w-12 h-12" />
+            <div className="text-left">
+              <h1 className="text-4xl font-black text-red-600 leading-tight">GB Warrior</h1>
+              <p className="uppercase text-[11px] tracking-[0.32em] text-zinc-400">Enter your academy</p>
+            </div>
+          </div>
+          <p className="text-sm text-zinc-300">Train smarter. Recover faster. Keep your frames unbreakable.</p>
         </div>
 
         <div className="space-y-2">
@@ -240,17 +250,19 @@ function App() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-3">
-          <input
-            type="text"
-            placeholder="Gracie Academy HQ"
-            className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
-          />
-          <input
-            type="email"
-            required
-            placeholder="Email or Member ID"
-            className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              type="text"
+              placeholder="GB Academy Location"
+              className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
+            />
+            <input
+              type="email"
+              required
+              placeholder="Email or Member ID"
+              className="bg-zinc-900/80 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-red-500"
+            />
+          </div>
           <input
             type="password"
             required
@@ -277,7 +289,17 @@ function App() {
     <div className="rounded-3xl bg-black border border-white/10 p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Mat Time Consistency</h3>
-        <span className="text-xs text-zinc-400">LAST 3 MONTHS</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setCheckedIn((prev) => !prev)}
+            className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+              checkedIn ? 'bg-red-600 text-white border-red-400' : 'bg-zinc-900 text-white border-white/15'
+            }`}
+          >
+            {checkedIn ? 'Checked In' : 'Check In'}
+          </button>
+          <span className="text-xs text-zinc-400">LAST 3 MONTHS</span>
+        </div>
       </div>
       <div className="grid grid-cols-7 gap-1.5 place-items-center">
         {heatmapData.map((level, idx) => (
@@ -381,18 +403,18 @@ function App() {
   const renderFuel = () => (
     <div className="rounded-3xl bg-black border border-white/10 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Fuel Up</h3>
+        <h3 className="text-lg font-semibold">Last Attended</h3>
         <UtensilsCrossed className="text-red-500" size={18} />
       </div>
       <div className="flex gap-3 overflow-x-auto pb-1">
-        {recipes.map((recipe) => (
+        {lastAttended.map((item) => (
           <div
-            key={recipe.name}
-            className="min-w-[190px] bg-zinc-900 border border-white/10 rounded-2xl p-4 space-y-2"
+            key={item.name}
+            className="min-w-[220px] rounded-3xl bg-zinc-900 border border-white/10 px-4 py-4 space-y-2 shadow-md"
           >
-            <p className="font-semibold">{recipe.name}</p>
-            <p className="text-xs text-zinc-400">{recipe.details}</p>
-            <p className="text-xs text-red-300">{recipe.macros}</p>
+            <p className="text-lg font-semibold text-white">{item.name}</p>
+            <p className="text-sm text-zinc-400">Session logged</p>
+            <p className="text-sm text-red-300 font-semibold">{item.duration}</p>
           </div>
         ))}
       </div>
@@ -409,14 +431,15 @@ function App() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-black" />
         <div className="relative p-6 md:p-8 space-y-4">
-          <div className="flex gap-2">
-            <span className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-semibold shadow-glow">
-              {heroFeature.tag}
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/15">
-              {heroFeature.belt}
-            </span>
-          </div>
+        <div className="flex gap-2 items-center">
+          <img src={LOGO_URL} alt="GB Warrior" className="w-8 h-8" />
+          <span className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-semibold shadow-glow">
+            {heroFeature.tag}
+          </span>
+          <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/15">
+            {heroFeature.belt}
+          </span>
+        </div>
           <div className="space-y-1">
             <h2 className="text-3xl md:text-4xl font-black">{heroFeature.title}</h2>
             <p className="text-base text-zinc-200 max-w-xl">{heroFeature.subtitle}</p>
@@ -597,7 +620,12 @@ function App() {
       <header className="max-w-5xl mx-auto px-4 pt-6 relative z-20">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <h1 className="text-3xl font-black leading-tight">Good {greeting}</h1>
+            <h1 className="text-3xl font-black leading-tight">
+              Good {greetingTime},{' '}
+              <span className="block text-red-500">
+                {greetingTitle}
+              </span>
+            </h1>
             <p className="text-sm text-zinc-400">Let’s get after it today.</p>
           </div>
           <button
