@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
       },
       colors: {
         matflix: {

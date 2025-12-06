@@ -25,7 +25,7 @@ const GEMINI_ENDPOINT =
 const navItems = [
   { key: 'mats', label: 'Mats', icon: Dumbbell },
   { key: 'events', label: 'Events', icon: CalendarDays },
-  { key: 'comms', label: 'Comms', icon: MessageCircle },
+  { key: 'comms', label: 'Chats', icon: MessageCircle },
   { key: 'study', label: 'Study', icon: Play },
 ];
 
@@ -35,9 +35,8 @@ const heroFeature = {
   belt: 'Guard Passing',
   duration: '32:18',
   coach: 'Professor Galvao',
-  tag: 'Trending in Academy',
-  image:
-    'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1600&q=80',
+  tag: 'Week 3',
+  image: 'https://graciebarra.com/wp-content/uploads/2025/03/vfv_9609_53801278114_o-X3.jpg',
 };
 
 const drillQueue = [
@@ -94,6 +93,16 @@ const StudyVideo = {
   runtime: '18:22',
 };
 
+const profile = {
+  name: 'Matheus Bessa',
+  school: 'Gracie Barra Burleigh Heads',
+  belt: 'Purple Belt',
+  stripes: '3/4',
+  attendance30: '20/30 Days',
+  avgPerWeek: '2 classes / week',
+  avatar: 'https://ik.imagekit.io/q0gorn2pwv/Screenshot%202025-12-07%20at%204.34.36%E2%80%AFAM.png',
+};
+
 const timeOfDay = () => {
   const hour = new Date().getHours();
   if (hour < 12) return 'Morning';
@@ -112,6 +121,7 @@ function App() {
   const [mealPlan, setMealPlan] = useState('');
   const [eventView, setEventView] = useState('dojo');
   const [chatOpen, setChatOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [drillLoading, setDrillLoading] = useState(false);
@@ -342,7 +352,7 @@ function App() {
   const renderLeaderboard = () => (
     <div className="rounded-3xl bg-black border border-white/10 p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Mat Enforcers</h3>
+        <h3 className="text-lg font-semibold">Top Attendences</h3>
         <Medal className="text-red-500" size={20} />
       </div>
       <div className="space-y-3">
@@ -400,7 +410,7 @@ function App() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-black" />
         <div className="relative p-6 md:p-8 space-y-4">
           <div className="flex gap-2">
-            <span className="px-3 py-1 rounded-full bg-red-600 text-black text-xs font-semibold shadow-glow">
+            <span className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-semibold shadow-glow">
               {heroFeature.tag}
             </span>
             <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold border border-white/15">
@@ -486,7 +496,7 @@ function App() {
     <div className="space-y-4">
       <div className="rounded-3xl bg-black border border-white/10 p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold">Comms</h3>
+          <h3 className="text-2xl font-bold">Chats</h3>
           <span className="px-3 py-1 rounded-full bg-white/10 text-xs flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-red-500" />
             Mats Open
@@ -584,15 +594,22 @@ function App() {
 
   return (
     <div className="min-h-screen pb-28 bg-gradient-to-b from-black via-black to-zinc-950">
-      <header className="max-w-5xl mx-auto px-4 pt-6">
+      <header className="max-w-5xl mx-auto px-4 pt-6 relative z-20">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h1 className="text-3xl font-black leading-tight">Good {greeting}</h1>
             <p className="text-sm text-zinc-400">Let’s get after it today.</p>
           </div>
-          <div className="w-12 h-12 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-sm font-semibold">
-            ME
-          </div>
+          <button
+            onClick={() => setProfileOpen(true)}
+            className="relative w-12 h-12 rounded-full border border-white/10 overflow-hidden ring-2 ring-purple-500 ring-offset-2 ring-offset-black shadow-[0_0_12px_rgba(168,85,247,0.7)] transition hover:ring-purple-400"
+          >
+            <img
+              src={profile.avatar}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+          </button>
         </div>
       </header>
 
@@ -685,6 +702,55 @@ function App() {
               >
                 ➤
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {profileOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-xl z-50 flex items-center justify-center px-4">
+          <div className="bg-zinc-950 border border-white/10 rounded-3xl max-w-lg w-full shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-white/10 border border-white/10 flex items-center justify-center">
+                  <img src={profile.avatar} alt={profile.name} className="w-12 h-12 rounded-full object-cover" />
+                </div>
+                <div>
+                  <p className="text-lg font-bold">{profile.name}</p>
+                  <p className="text-sm text-zinc-400">{profile.school}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setProfileOpen(false)}
+                className="w-9 h-9 flex items-center justify-center rounded-xl border border-white/10 text-lg text-zinc-300 hover:text-white"
+              >
+                ×
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-2xl bg-black/60 border border-white/10 p-3">
+                <p className="text-xs text-zinc-400">Belt Rank</p>
+                <p className="font-semibold text-purple-400">{profile.belt}</p>
+              </div>
+              <div className="rounded-2xl bg-black/60 border border-white/10 p-3">
+                <p className="text-xs text-zinc-400">Stripes</p>
+                <p className="font-semibold">{profile.stripes}</p>
+              </div>
+              <div className="rounded-2xl bg-black/60 border border-white/10 p-3">
+                <p className="text-xs text-zinc-400">Attendance (30d)</p>
+                <p className="font-semibold">{profile.attendance30}</p>
+              </div>
+              <div className="rounded-2xl bg-black/60 border border-white/10 p-3">
+                <p className="text-xs text-zinc-400">Avg Weekly</p>
+                <p className="font-semibold">{profile.avgPerWeek}</p>
+              </div>
+            </div>
+            <div className="rounded-2xl bg-gradient-to-r from-red-600 to-red-700 text-white p-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold">Mat Streak</p>
+                <p className="text-lg font-bold">Keep rolling. OSS.</p>
+              </div>
+              <Dumbbell size={28} />
             </div>
           </div>
         </div>
