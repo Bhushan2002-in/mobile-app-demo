@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ef4444 #0f0f10;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0f0f10;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #ef4444;
+  border-radius: 9999px;
+  border: 2px solid #0f0f10;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #f97373;
+}
+
+body {
+  @apply bg-black text-white font-sans antialiased;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, transparent 0),
+    linear-gradient(135deg, rgba(239, 68, 68, 0.07), rgba(24, 24, 27, 0.6));
+  background-size: 20px 20px, cover;
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(239, 68, 68, 0.5);
+  color: white;
+}
+
+.glass {
+  @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-glow;
+}
+
+.glow {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 80px rgba(239, 68, 68, 0.35);
+}
